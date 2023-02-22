@@ -14,7 +14,7 @@ class Redis(private val infoManager: InfoManager) {
 
     init {
         try {
-            FileInputStream("./config.properties").use { input ->
+            FileInputStream("./extensions/config.properties").use { input ->
                 val prop = Properties()
                 prop.load(input)
                 this.uri = prop.getProperty("uri")

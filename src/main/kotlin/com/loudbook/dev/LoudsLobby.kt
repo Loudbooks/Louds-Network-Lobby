@@ -4,6 +4,7 @@ import dev.hypera.scaffolding.Scaffolding
 import dev.hypera.scaffolding.schematic.Schematic
 import net.minestom.server.MinecraftServer
 import net.minestom.server.coordinate.Pos
+import net.minestom.server.entity.GameMode
 import net.minestom.server.entity.PlayerSkin
 import net.minestom.server.event.player.PlayerLoginEvent
 import net.minestom.server.extensions.Extension
@@ -35,6 +36,8 @@ class LoudsLobby : Extension() {
             event.setSpawningInstance(
                 instanceContainer
             )
+            event.player.respawnPoint = Pos(0.5, 60.0, 0.5, -90f, 0f)
+            event.player.gameMode = GameMode.ADVENTURE
             val skin = PlayerSkin.fromUsername(event.player.username)
             event.player.skin = skin
         }
