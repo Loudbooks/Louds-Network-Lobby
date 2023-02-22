@@ -9,7 +9,7 @@ import java.io.IOException
 import java.util.*
 
 class Redis(private val infoManager: InfoManager) {
-    private val client: RedissonClient
+    val client: RedissonClient
     private var uri: String? = null
 
     init {

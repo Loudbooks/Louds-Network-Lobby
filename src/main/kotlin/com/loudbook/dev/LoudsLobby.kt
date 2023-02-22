@@ -19,6 +19,7 @@ class LoudsLobby : Extension() {
     private var fullbright: DimensionType = DimensionType.builder(NamespaceID.from("minestom:full_bright"))
         .ambientLight(2.0f)
         .build()
+    lateinit var redis: Redis
     override fun initialize() {
         MinecraftServer.getDimensionTypeManager().addDimension(fullbright)
 
@@ -48,13 +49,14 @@ class LoudsLobby : Extension() {
 
         val infoManager = InfoManager()
 
-        val redis = Redis(infoManager)
+        this.redis = Redis(infoManager)
 
         redis.subscribeServerInfo()
 
     }
 
     override fun terminate() {
+        redis.client.shutdown()
     }
 
     private fun initializeLobby(instance: InstanceContainer) {
