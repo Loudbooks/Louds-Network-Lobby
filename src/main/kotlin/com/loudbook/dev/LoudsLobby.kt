@@ -8,8 +8,10 @@ import net.minestom.server.entity.GameMode
 import net.minestom.server.entity.PlayerSkin
 import net.minestom.server.event.player.PlayerLoginEvent
 import net.minestom.server.extensions.Extension
+import net.minestom.server.extras.bungee.BungeeCordProxy
 import net.minestom.server.instance.InstanceContainer
 import net.minestom.server.instance.block.Block
+import net.minestom.server.timer.TaskSchedule
 import net.minestom.server.utils.NamespaceID
 import net.minestom.server.world.DimensionType
 import java.io.File
@@ -19,7 +21,7 @@ class LoudsLobby : Extension() {
     private var fullbright: DimensionType = DimensionType.builder(NamespaceID.from("minestom:full_bright"))
         .ambientLight(2.0f)
         .build()
-    lateinit var redis: Redis
+    private var redis: Redis? = null
     override fun initialize() {
         MinecraftServer.getDimensionTypeManager().addDimension(fullbright)
 
@@ -45,18 +47,21 @@ class LoudsLobby : Extension() {
 
         initializeLobby(instanceContainer)
 
-        MinecraftServer.setBrandName("Loudbook's Minigames")
+        MinecraftServer.setBrandName("Loud's Network")
 
         val infoManager = InfoManager()
 
         this.redis = Redis(infoManager)
 
-        redis.subscribeServerInfo()
+        MinecraftServer.getCommandManager().register(QueueCommand(infoManager, redis!!))
 
+        BungeeCordProxy.enable()
+
+        this.redis!!.subscribeServerInfo()
     }
 
     override fun terminate() {
-        redis.client.shutdown()
+        this.redis!!.client.shutdown()
     }
 
     private fun initializeLobby(instance: InstanceContainer) {

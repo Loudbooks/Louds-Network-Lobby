@@ -31,8 +31,11 @@ class Redis(private val infoManager: InfoManager) {
 
     fun subscribeServerInfo() {
         this.client.getTopic("server-info").addListener(ServerInfo::class.java) { _, msg ->
-            if (msg.shuttingDown) infoManager.removeServerInfo(msg)
-            else infoManager.addServerInfo(msg)
+            if (msg.shuttingDown) {
+                infoManager.removeServerInfo(msg)
+            } else {
+                infoManager.addServerInfo(msg)
+            }
         }
     }
 }

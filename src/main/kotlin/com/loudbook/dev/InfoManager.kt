@@ -7,17 +7,28 @@ class InfoManager {
 
     fun addServerInfo(serverInfo: ServerInfo) {
         for (info in this.serverInfo) {
-            if (info.id == serverInfo.id) return
-            this.serverInfo.add(serverInfo)
+            if (info.id == serverInfo.id) {
+                this.serverInfo.remove(info)
+                break
+            }
         }
+        this.serverInfo.add(serverInfo)
     }
 
     fun removeServerInfo(serverInfo: ServerInfo) {
         for (info in this.serverInfo) {
             if (info.id == serverInfo.id) {
+                println("Removed server info: $info")
                 this.serverInfo.remove(info)
                 return
             }
         }
+    }
+
+    fun getServer(gameType: String): ServerInfo? {
+        for (info in this.serverInfo) {
+            if (info.gameType.equals(gameType, true)) return info
+        }
+        return null
     }
 }
